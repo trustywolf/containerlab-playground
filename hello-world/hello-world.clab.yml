@@ -1,0 +1,71 @@
+name: hello-world
+
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.30.0F
+      env:
+        CLAB_MGMT_VRF: MGMT
+    vr-veos:
+      image: vrnetlab/vr-veos:4.30.0F
+    crpd:
+      image: crpd:23.1R1.8
+    vr-vmx:
+      image: vrnetlab/vr-vmx:23.1R1.8
+    vr-vqfx:
+      image: vrnetlab/vr-vqfx:20.3R1.8
+    xrd:
+      image: ios-xr/xrd-control-plane:7.9.1
+      env:
+        CLAB_MGMT_VRF: MGMT
+    vr-xrv9k:
+      image: vrnetlab/vr-xrv9k:7.9.1
+    vr-csr:
+      image: vrnetlab/vr-csr:17.03.07
+    linux:
+      image: nicolaka/netshoot:latest
+
+  nodes:
+    ceos:
+      kind: ceos
+      startup-config: startup-config/ceos.cfg
+    veos:
+      kind: vr-veos
+      startup-config: startup-config/veos.cfg
+    crpd:
+      kind: crpd
+      startup-config: startup-config/crpd.cfg
+      license: license/junos_sfnt.lic
+      binds:
+        - license/junos_sfnt.lic:/config/license/safenet/junos_sfnt.lic:ro
+    vmx:
+      kind: vr-vmx
+      startup-config: startup-config/vmx.cfg
+    vqfx:
+      kind: vr-vqfx
+      startup-config: startup-config/vqfx.cfg
+    xrd:
+      kind: xrd
+      startup-config: startup-config/xrd.cfg
+    xrv9k:
+      kind: vr-xrv9k
+      startup-config: startup-config/xrv9k.cfg
+    csr:
+      kind: vr-csr
+      startup-config: startup-config/csr.cfg
+    linux:
+      kind: linux
+    switch:
+      kind: bridge
+
+  links:
+    # switch
+    - endpoints: ["ceos:eth1", "switch:eth1"]
+    - endpoints: ["veos:eth1", "switch:eth2"]
+    - endpoints: ["crpd:eth1", "switch:eth3"]
+    - endpoints: ["vmx:eth1", "switch:eth4"]
+    - endpoints: ["vqfx:eth1", "switch:eth5"]
+    - endpoints: ["xrd:Gi0-0-0-0", "switch:eth6"]
+    - endpoints: ["xrv9k:eth1", "switch:eth7"]
+    - endpoints: ["csr:eth1", "switch:eth8"]
+    - endpoints: ["linux:eth1", "switch:eth9"]

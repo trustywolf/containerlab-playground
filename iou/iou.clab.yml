@@ -1,0 +1,13 @@
+# a simple topo of two iou containers connected with each other
+name: iou
+
+topology:
+  nodes:
+    iou-l2:
+      kind: linux
+      image: iou-l2
+    iou-l3:
+      kind: linux
+      image: iou-l3
+  links:
+    - endpoints: ["iou-l2:eth1", "iou-l3:eth1"]
